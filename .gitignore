@@ -1,0 +1,6 @@
+.vs/
+bin/
+obj/
+PythonHelper/output
+HearthBuddy.csproj.user
+Hearthbuddy.exe

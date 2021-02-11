@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HearthBuddy", "HearthBuddy.csproj", "{1AFD471F-C016-4BFB-8C34-FAE925DDA724}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "PythonHelper", "PythonHelper\PythonHelper.pyproj", "{6F619A34-6DC4-48E6-84A9-B030714EC6DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{1AFD471F-C016-4BFB-8C34-FAE925DDA724}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1AFD471F-C016-4BFB-8C34-FAE925DDA724}.Release|x86.ActiveCfg = Release|x86
 		{1AFD471F-C016-4BFB-8C34-FAE925DDA724}.Release|x86.Build.0 = Release|x86
+		{6F619A34-6DC4-48E6-84A9-B030714EC6DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F619A34-6DC4-48E6-84A9-B030714EC6DA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6F619A34-6DC4-48E6-84A9-B030714EC6DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F619A34-6DC4-48E6-84A9-B030714EC6DA}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
