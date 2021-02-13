@@ -1,4 +1,4 @@
-﻿namespace HREngine.Bots
+namespace HREngine.Bots
 {
     using System.Collections.Generic;
 
@@ -7,15 +7,47 @@
 
         public class Handcard
         {
+            /// <summary>
+            /// 手牌的位置
+            /// </summary>
             public int position = 0;
+            /// <summary>
+            /// 实体ID
+            /// </summary>
             public int entity = -1;
+            /// <summary>
+            /// 法力值消耗
+            /// </summary>
             public int manacost = 1000;
+            /// <summary>
+            /// 额外攻击力
+            /// <para>如污手党buff后的手牌</para>
+            /// </summary>
             public int addattack = 0;
+            /// <summary>
+            /// 额外生命值/耐久度
+            /// <para>如污手党buff后的手牌</para>
+            /// </summary>
             public int addHp = 0;
+            /// <summary>
+            /// 卡牌
+            /// </summary>
             public CardDB.Card card;
+            /// <summary>
+            /// 目标
+            /// </summary>
             public Minion target;
+            /// <summary>
+            /// 上回合使用过元素的高亮
+            /// </summary>
             public int elemPoweredUp = 0;
+            /// <summary>
+            /// 扩展参数2
+            /// </summary>
             public int extraParam2 = 0;
+            /// <summary>
+            /// 扩展参数3
+            /// </summary>
             public bool extraParam3 = false;
 
             public Handcard()

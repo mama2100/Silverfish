@@ -1,4 +1,4 @@
-﻿using Triton.Game.Mapping;
+using Triton.Game.Mapping;
 
 namespace HREngine.Bots
 {
@@ -25,94 +25,301 @@ namespace HREngine.Bots
     public class Minion
     {
         //dont silence----------------------------
+        /// <summary>
+        /// 受到伤害次数
+        /// </summary>
         public int anzGotDmg = 0;
+        /// <summary>
+        /// 受到伤害总和
+        /// </summary>
         public int GotDmgValue = 0;
+        /// <summary>
+        /// 受到治疗次数
+        /// </summary>
         public int anzGotHealed = 0;
+        /// <summary>
+        /// 受到治疗总和
+        /// </summary>
         public int GotHealedValue = 0;
+        /// <summary>
+        /// 是否进行过激励
+        /// </summary>
         public bool gotInspire = false;
+        /// <summary>
+        /// 是否为英雄
+        /// <para>英雄和随从在HearthBuddy中都是用Minion来表示</para>
+        /// </summary>
         public bool isHero = false;
+        /// <summary>
+        /// 是否为己方
+        /// </summary>
         public bool own;
         public int pID = 0;
 
+        /// <summary>
+        /// 名称
+        /// </summary>
         public CardDB.cardName name = CardDB.cardName.unknown;
+        /// <summary>
+        /// 职业
+        /// <para>只用于英雄</para>
+        /// </summary>
         public TAG_CLASS cardClass = TAG_CLASS.INVALID;
+        /// <summary>
+        /// 职业契合度
+        /// <para>各种族（鱼人恶魔等）与职业相关性</para>
+        /// </summary>
         public int synergy = 0;
+        /// <summary>
+        /// 手牌信息
+        /// <para>如果Minion中储存的内容不够的话，可以调用这个获取更多的信息</para>
+        /// <para>例如<c>m.handcard.card</c></para>
+        /// </summary>
         public Handmanager.Handcard handcard;
+        /// <summary>
+        /// 实体ID
+        /// </summary>
         public int entitiyID = -1;
-        //public int id = -1;//delete this
+
+        /// <summary>
+        /// 在场上的位置
+        /// </summary>
         public int zonepos = 0;
         public CardDB.Card deathrattle2;
 
+        /// <summary>
+        /// 是否在本回合使用
+        /// </summary>
         public bool playedThisTurn = false;
+        /// <summary>
+        /// 是否在上回合使用
+        /// </summary>
         public bool playedPrevTurn = false;
+        /// <summary>
+        /// 本回合攻击次数
+        /// </summary>
         public int numAttacksThisTurn = 0;
+        /// <summary>
+        /// 是否攻击时免疫
+        /// <para>暂时只对角斗士的长弓存在时有用。TODO为金牌猎手克里而添加随从的部分</para>
+        /// </summary>
         public bool immuneWhileAttacking = false;
 
         public bool allreadyAttacked = false;
 
-        
+        /// <summary>
+        /// 暗影狂乱
+        /// <para>直到回合结束，获得一个攻击力小于或等于3的敌方随从的控制权</para>
+        /// </summary>
         public bool shadowmadnessed = false;//´can be silenced :D
 
+        /// <summary>
+        /// 我方回合开始被消灭
+        /// </summary>
         public bool destroyOnOwnTurnStart = false; // depends on own!
+        /// <summary>
+        /// 敌方回合开始被消灭
+        /// </summary>
         public bool destroyOnEnemyTurnStart = false; // depends on own!
+        /// <summary>
+        /// 我方回合结束被消灭
+        /// </summary>
         public bool destroyOnOwnTurnEnd = false; // depends on own!
+        /// <summary>
+        /// 敌方回合结束被消灭
+        /// </summary>
         public bool destroyOnEnemyTurnEnd = false; // depends on own!
+        /// <summary>
+        /// 回合开始时变更所有权
+        /// <para>例如：暗影狂乱结束后的归还</para>
+        /// </summary>
         public bool changeOwnerOnTurnStart = false;
 
+        /// <summary>
+        /// 拥有潜行，直到你的下个回合
+        /// </summary>
         public bool conceal = false;
+        /// <summary>
+        /// 先祖之魂
+        /// <para>亡语：再次召唤该随从。</para>
+        /// </summary>
         public int ancestralspirit = 0;
+        /// <summary>
+        /// 救赎
+        /// <para>亡语：回到战场，并具有1点生命值。</para>
+        /// </summary>
         public int desperatestand = 0;
+        /// <summary>
+        /// 丛林之魂
+        /// <para>亡语：召唤一个2/2的树人。</para>
+        /// </summary>
         public int souloftheforest = 0;
+        /// <summary>
+        /// 骑乘剑龙
+        /// <para>(+2/+6并具有嘲讽。)亡语：召唤一个剑龙。</para>
+        /// </summary>
         public int stegodon = 0;
+        /// <summary>
+        /// 活性孢子
+        /// <para>亡语：召唤两个1/1的植物。</para>
+        /// </summary>
         public int livingspores = 0;
+        /// <summary>
+        /// 探险帽
+        /// <para>(+1/+1。)亡语：将一张“探险帽”置入你的手牌。</para>
+        /// </summary>
         public int explorershat = 0;
+        /// <summary>
+        /// 回响之魂
+        /// <para>亡语：将该随从移回你的手牌。</para>
+        /// </summary>
         public int returnToHand = 0;
+        /// <summary>
+        /// 蛛魔孢子
+        /// <para>亡语：随机将一张野兽牌置入你的手牌。</para>
+        /// </summary>
         public int infest = 0;
 
+        /// <summary>
+        /// 我方智慧祝福
+        /// <para>选择一个随从，每当其进行攻击，便抽一张牌。</para>
+        /// </summary>
         public int ownBlessingOfWisdom = 0;
+        /// <summary>
+        /// 敌方智慧祝福
+        /// <para>选择一个随从，每当其进行攻击，便抽一张牌。</para>
+        /// </summary>
         public int enemyBlessingOfWisdom = 0;
+        /// <summary>
+        /// 我方真言术：耀
+        /// <para>选择一个随从。每当其进行攻击，为你的英雄恢复4点生命值。</para>
+        /// </summary>
         public int ownPowerWordGlory = 0;
+        /// <summary>
+        /// 敌方真言术：耀
+        /// <para>选择一个随从。每当其进行攻击，为你的英雄恢复4点生命值。</para>
+        /// </summary>
         public int enemyPowerWordGlory = 0;
+        /// <summary>
+        /// 法术强度
+        /// </summary>
         public int spellpower = 0;
 
+        /// <summary>
+        /// 无法成为法术或英雄技能的目标
+        /// </summary>
         public bool cantBeTargetedBySpellsOrHeroPowers = false;
+        /// <summary>
+        /// 无法攻击英雄
+        /// </summary>
         public bool cantAttackHeroes = false;
+        /// <summary>
+        /// 无法攻击
+        /// </summary>
         public bool cantAttack = false;
 
+        /// <summary>
+        /// 生命值
+        /// </summary>
         public int Hp = 0;
+        /// <summary>
+        /// 最大生命值
+        /// </summary>
         public int maxHp = 0;
+        /// <summary>
+        /// 护甲值
+        /// <para>只用于英雄</para>
+        /// </summary>
         public int armor = 0;
 
+        /// <summary>
+        /// 攻击力
+        /// </summary>
         public int Angr = 0;
         public int AdjacentAngr = 0;
+        /// <summary>
+        /// 临时攻击力
+        /// <para>本回合额外攻击力</para>
+        /// </summary>
         public int tempAttack = 0;
         public int justBuffed = 0;
 
+        /// <summary>
+        /// 准备状态
+        /// <para>泛绿光/可进行攻击</para>
+        /// </summary>
         public bool Ready = false;
 
+        /// <summary>
+        /// 嘲讽
+        /// </summary>
         public bool taunt = false;
-        public bool wounded = false;//hp red?
+        /// <summary>
+        /// 受伤状态
+        /// <para>hp red</para>
+        /// </summary>
+        public bool wounded = false;
 
+        /// <summary>
+        /// 圣盾
+        /// </summary>
         public bool divineshild = false;
+        /// <summary>
+        /// 风怒
+        /// </summary>
         public bool windfury = false;
+        /// <summary>
+        /// 冻结
+        /// </summary>
         public bool frozen = false;
+        /// <summary>
+        /// 潜行
+        /// </summary>
         public bool stealth = false;
+        /// <summary>
+        /// 免疫
+        /// </summary>
         public bool immune = false;
         public bool untouchable = false;
         public bool exhausted = false;
+        /// <summary>
+        /// 吸血
+        /// </summary>
         public bool lifesteal = false;
         public bool dormant = false;
         public bool outcast = false;//流放
 		public bool reborn = false;
         public bool Spellburst = false;
 
+        /// <summary>
+        /// 冲锋
+        /// </summary>
         public int charge = 0;
+        /// <summary>
+        /// 突袭
+        /// </summary>
         public int rush = 0;
+        /// <summary>
+        /// 秘密抉择亡语
+        /// <para>目前仅用于命运织网蛛，ICC_047t</para>
+        /// </summary>
         public int hChoice = 0;
+        /// <summary>
+        /// 剧毒
+        /// </summary>
         public bool poisonous = false;
+        /// <summary>
+        /// 生命值无法被降到1点以下
+        /// </summary>
         public bool cantLowerHPbelowONE = false;
 
+        /// <summary>
+        /// 被沉默
+        /// </summary>
         public bool silenced = false;
+        /// <summary>
+        /// 从手牌中打出
+        /// </summary>
         public bool playedFromHand = false;
         public bool extraParam = false;
         public int extraParam2 = 0;

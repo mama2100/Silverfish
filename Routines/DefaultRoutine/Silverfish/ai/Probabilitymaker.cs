@@ -1,4 +1,4 @@
-﻿namespace HREngine.Bots
+namespace HREngine.Bots
 {
     using System;
     using System.Collections.Generic;
@@ -27,29 +27,119 @@
         public bool canbeTriggeredWithPlayingMinion = true;
         public bool canbeTriggeredWithPlayingHeroPower = true;*/
 
+        //以下 canBe_xxx 等字段含义为当前 SecretItem 是否可能是 xxx 奥秘，若为true则代表可能
+
+        /// <summary>
+        /// 毒蛇陷阱
+        /// <para>奥秘：当你的随从受到攻击时，召唤三条1/1的蛇。</para>
+        /// </summary>
         public bool canBe_snaketrap = true;
+        /// <summary>
+        /// 狙击
+        /// <para>奥秘：在你的对手使用一张随从牌后，对该随从造成4点伤害。</para>
+        /// </summary>
         public bool canBe_snipe = true;
+        /// <summary>
+        /// 爆炸陷阱
+        /// <para>奥秘：当你的英雄受到攻击，对所有敌人造成2点伤害。</para>
+        /// </summary>
         public bool canBe_explosive = true;
+        /// <summary>
+        /// 捕熊陷阱
+        /// <para>奥秘：在你的英雄受到攻击后，召唤一个3/3并具有嘲讽的灰熊。</para>
+        /// </summary>
         public bool canBe_beartrap = true;
+        /// <summary>
+        /// 冰冻陷阱
+        /// <para>奥秘：当一个敌方随从攻击时，将其移回拥有者的手牌，并且法力值消耗增加（2）点。</para>
+        /// </summary>
         public bool canBe_freezing = true;
+        /// <summary>
+        /// 误导
+        /// <para>奥秘：当一个敌人攻击你的英雄时，改为该敌人随机攻击另一个角色。</para>
+        /// </summary>
         public bool canBe_missdirection = true;
+        /// <summary>
+        /// 毒镖陷阱
+        /// <para>奥秘：在对方使用英雄技能后，随机对一个敌人造成5点伤害。</para>
+        /// </summary>
         public bool canBe_darttrap = true;
+        /// <summary>
+        /// 豹子戏法
+        /// <para>奥秘：在你的对手施放一个法术后，召唤一个4/2并具有潜行的猎豹。</para>
+        /// </summary>
         public bool canBe_cattrick = true;
 
+        /// <summary>
+        /// 法术反制
+        /// <para>奥秘：当你的对手施放一个法术时，反制该法术。</para>
+        /// </summary>
         public bool canBe_counterspell = true;
+        /// <summary>
+        /// 寒冰护体
+        /// <para>奥秘：当你的英雄受到攻击时，获得8点护甲值。</para>
+        /// </summary>
         public bool canBe_icebarrier = true;
+        /// <summary>
+        /// 寒冰屏障
+        /// <para>奥秘：当你的英雄将要承受致命伤害时，防止这些伤害，并使其在本回合中获得免疫。</para>
+        /// </summary>
         public bool canBe_iceblock = true;
+        /// <summary>
+        /// 镜像实体
+        /// <para>奥秘：在你的对手使用一张随从牌后，召唤一个该随从的复制。</para>
+        /// </summary>
         public bool canBe_mirrorentity = true;
+        /// <summary>
+        /// 扰咒术
+        /// <para>奥秘：当一个敌方法术以一个随从为目标时，召唤一个1/3的随从并使其成为新的目标。</para>
+        /// </summary>
         public bool canBe_spellbender = true;
+        /// <summary>
+        /// 蒸发
+        /// <para>奥秘：当一个随从攻击你的英雄，将其消灭。</para>
+        /// </summary>
         public bool canBe_vaporize = true;
+        /// <summary>
+        /// 复制
+        /// <para>奥秘：当一个友方随从死亡时，将两张该随从的复制置入你的手牌。</para>
+        /// </summary>
         public bool canBe_duplicate = true;
+        /// <summary>
+        /// 轮回
+        /// <para>奥秘：当一个友方随从死亡时，随机召唤一个法力值消耗相同的随从。</para>
+        /// </summary>
         public bool canBe_effigy = true;
 
+        /// <summary>
+        /// 以眼还眼
+        /// <para>奥秘：当你的英雄受到伤害时，对敌方英雄造成等量伤害。</para>
+        /// </summary>
         public bool canBe_eyeforaneye = true;
+        /// <summary>
+        /// 崇高牺牲
+        /// <para>奥秘：当一个敌人攻击时，召唤一个2/1的防御者，并使其成为攻击的目标。</para>
+        /// </summary>
         public bool canBe_noblesacrifice = true;
+        /// <summary>
+        /// 救赎
+        /// <para>奥秘：当一个友方随从死亡时，使其回到战场，并具有1点生命值。</para>
+        /// </summary>
         public bool canBe_redemption = true;
+        /// <summary>
+        /// 忏悔
+        /// <para>奥秘：在你的对手使用一张随从牌后，使该随从的生命值降为1。</para>
+        /// </summary>
         public bool canBe_repentance = true;
+        /// <summary>
+        /// 复仇
+        /// <para>奥秘：当你的随从死亡时，随机使一个友方随从获得+3/+2。</para>
+        /// </summary>
         public bool canBe_avenge = true;
+        /// <summary>
+        /// 审判
+        /// <para>奥秘：在你的对手使用一张随从牌后，如果他控制至少三个随从，则将其消灭。</para>
+        /// </summary>
         public bool canBe_sacredtrial = true;
 
         public int entityId = 0;
@@ -229,6 +319,11 @@
             */
         }
 
+        /// <summary>
+        /// 攻击后更新奥秘状态
+        /// </summary>
+        /// <param name="DefenderIsHero">是否以英雄为攻击目标</param>
+        /// <param name="AttackerIsHero">是否攻击者为英雄</param>
         public void usedTrigger_CharIsAttacked(bool DefenderIsHero, bool AttackerIsHero)
         {
             if (DefenderIsHero)
@@ -253,6 +348,10 @@
             updateCanBeTriggered();
         }
 
+        /// <summary>
+        /// 我方使用随从后更新奥秘状态
+        /// </summary>
+        /// <param name="i">使用随从数量(待定)</param>
         public void usedTrigger_MinionIsPlayed(int i)
         {
             this.canBe_snipe = false;
@@ -262,6 +361,10 @@
             updateCanBeTriggered();
         }
 
+        /// <summary>
+        /// 我方使用法术后更新奥秘状态
+        /// </summary>
+        /// <param name="minionIsTarget">是否以随从为目标</param>
         public void usedTrigger_SpellIsPlayed(bool minionIsTarget)
         {
             this.canBe_counterspell = false;
@@ -270,6 +373,9 @@
             updateCanBeTriggered();
         }
 
+        /// <summary>
+        /// 敌方随从死亡后更新奥秘状态
+        /// </summary>
         public void usedTrigger_MinionDied()
         {
             this.canBe_avenge = false;
@@ -279,12 +385,20 @@
             updateCanBeTriggered();
         }
 
+        /// <summary>
+        /// 敌方英雄受到伤害后更新奥秘状态
+        /// </summary>
+        /// <param name="deadly">是否斩杀</param>
         public void usedTrigger_HeroGotDmg(bool deadly = false)
         {
             this.canBe_eyeforaneye = false;
             if (deadly) this.canBe_iceblock = false;
             updateCanBeTriggered();
         }
+
+        /// <summary>
+        /// 我方使用英雄技能后更新奥秘状态
+        /// </summary>
         public void usedTrigger_HeroPowerUsed()
         {
             this.canBe_darttrap = false;
@@ -322,6 +436,11 @@
             return retval + ",";
         }
 
+        /// <summary>
+        /// 判断某奥秘与当前奥秘(SecretItem)是否相同
+        /// </summary>
+        /// <param name="s">将拿来对比的奥秘</param>
+        /// <returns></returns>
         public bool isEqual(SecretItem s)
         {
             bool result = this.entityId == s.entityId;
@@ -347,6 +466,9 @@
         public List<GraveYardItem> turngraveyardAll = new List<GraveYardItem>();//All
         List<GraveYardItem> graveyartTillTurnStart = new List<GraveYardItem>();
 
+        /// <summary>
+        /// 敌方奥秘列表
+        /// </summary>
         public List<SecretItem> enemySecrets = new List<SecretItem>();
 
         public bool feugenDead = false;
@@ -388,7 +510,7 @@
                 if (tmp.Key == CardDB.cardIDEnum.FP1_014) this.stalaggDead = true;
             }
         }
-        
+
         public void printTurnGraveYard()
         {
             /*string g = "";
@@ -589,6 +711,13 @@
             this.enemySecrets.AddRange(newlist);
         }
 
+        /// <summary>
+        /// 获取一个新的SecretItem
+        /// </summary>
+        /// <remarks>由于每个 SecretItem 的字段包含多个职业奥秘的可能性，所以使用此方法根据奥秘职业来直接排除一些其他职业奥秘的可能性。同时如果对方坟场含有两张及以上某奥秘也将排除其可能性。</remarks>
+        /// <param name="entityid"></param>
+        /// <param name="SecClass">奥秘所属职业</param>
+        /// <returns></returns>
         public SecretItem getNewSecretGuessedItem(int entityid, TAG_CLASS SecClass)
         {
             foreach (SecretItem si in this.enemySecrets)
@@ -607,10 +736,11 @@
                 case TAG_CLASS.MAGE: break;
                 case TAG_CLASS.HUNTER: break;
                 case TAG_CLASS.DRUID: break;
+                case TAG_CLASS.DEMONHUNTER: break;
                 default:
-                    Helpfunctions.Instance.ErrorLog("Problem is detected: undefined Secret class " + SecClass);
+                    Helpfunctions.Instance.ErrorLog("发现错误：奥秘职业" + SecClass + "未定义。");
                     SecClass = Hrtprozis.Instance.heroEnumtoTagClass(Hrtprozis.Instance.enemyHeroname);
-                    Helpfunctions.Instance.ErrorLog("attempt to restore... " + SecClass);
+                    Helpfunctions.Instance.ErrorLog("设置奥秘职业默认为敌方职业：" + SecClass);
                     break;
             }
 
@@ -791,6 +921,7 @@
         }
 
 
+        //此方法无引用，不了解具体含义
         public bool isAllowedSecret(CardDB.cardIDEnum cardID)
         {
             if (ownCardsOut.ContainsKey(cardID) && ownCardsOut[cardID] >= 2) return false;
@@ -823,6 +954,10 @@
         }
 
 
+        /// <summary>
+        /// 设置敌方奥秘列表
+        /// </summary>
+        /// <param name="enemySecretl">新的奥秘列表</param>
         public void setEnemySecretData(List<SecretItem> enemySecretl)
         {
             this.enemySecrets.Clear();
@@ -832,6 +967,10 @@
             }
         }
 
+        /// <summary>
+        /// 更新敌方奥秘列表与新的奥秘列表中 entity 相同的 SecretItem
+        /// </summary>
+        /// <param name="enemySecretl">新的奥秘列表</param>
         public void updateSecretList(List<SecretItem> enemySecretl)
         {
             List<SecretItem> temp = new List<SecretItem>();
@@ -857,14 +996,19 @@
         }
 
 
+        /// <summary>
+        /// 通过两个 Playfield 对比来更新奥秘列表
+        /// </summary>
+        /// <param name="p">新的 playfield</param>
+        /// <param name="old">旧的 playfield</param>
         public void updateSecretList(Playfield p, Playfield old)
         {
             if (p.enemySecretCount == 0 || p.optionsPlayedThisTurn == 0) return;
             Action doneMove = Ai.Instance.bestmove;
             if (doneMove == null) return;
 
-            List<CardDB.cardIDEnum> enemySecretsOpenedStep = new List<CardDB.cardIDEnum>();
-            List<CardDB.Card> enemyMinionsDiedStep = new List<CardDB.Card>();
+            List<CardDB.cardIDEnum> enemySecretsOpenedStep = new List<CardDB.cardIDEnum>();//两种场面对比下敌方已经显示的奥秘
+            List<CardDB.Card> enemyMinionsDiedStep = new List<CardDB.Card>();//两种场面对比下敌方死亡的随从
             foreach (KeyValuePair<CardDB.cardIDEnum, int> tmp in p.enemyCardsOut)
             {
                 if (!old.enemyCardsOut.ContainsKey(tmp.Key) || old.enemyCardsOut[tmp.Key] != tmp.Value)
@@ -875,6 +1019,7 @@
                 }
             }
 
+            //以下变量含义为是否排除该奥秘，若为true代表可以排除，即当前敌方头上不存在该奥秘
             bool beartrap = false;
             bool explosive = false;
             bool snaketrap = false;
@@ -903,7 +1048,7 @@
             if (enemyMinionsDiedStep.Count > 0)
             {
                 duplicate = true;
-                
+
                 if (old.enemyMinions.Count > 1) avenge = true;
                 if (old.enemyMinions.Count < 7)
                 {
@@ -915,6 +1060,7 @@
                 {
                     switch (enemyMinionsDiedStep[0].cardIDenum)
                     {
+                        //此处待添加一些亡语召唤生物的随从
                         case CardDB.cardIDEnum.AT_019: redemption = false; effigy = false; break;
                         case CardDB.cardIDEnum.AT_036: redemption = false; effigy = false; break;
                         case CardDB.cardIDEnum.BRMC_87: redemption = false; effigy = false; break;
@@ -1101,8 +1247,5 @@
                 if (sacredtrial) si.canBe_sacredtrial = false;
             }
         }
-
-
     }
-
 }

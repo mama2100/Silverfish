@@ -1,4 +1,4 @@
-﻿namespace HREngine.Bots
+namespace HREngine.Bots
 {
     using System;
     using System.Collections.Generic;
@@ -1149,6 +1149,12 @@
 
         }
 
+        /// <summary>
+        /// 比较两个Playfield是否相同，用于AI计算，若不相同则会重新计算
+        /// </summary>
+        /// <param name="p">被比较的playfield</param>
+        /// <param name="logg">是否输出log</param>
+        /// <returns></returns>
         public bool isEqual(Playfield p, bool logg)
         {
             if (logg)
@@ -1319,6 +1325,11 @@
             return true;
         }
 
+        /// <summary>
+        /// 比较两个Playfield是否相同，用于silverfish
+        /// </summary>
+        /// <param name="p">被比较的playfield</param>
+        /// <returns></returns>
         public bool isEqualf(Playfield p)
         {
             if (this.value != p.value) return false;
@@ -1428,6 +1439,10 @@
             return true;
         }
 
+        /// <summary>
+        /// 当前Playfield的唯一标识码
+        /// </summary>
+        /// <returns></returns>
         public Int64 GetPHash()
         {
             Int64 retval = 0;
@@ -1815,6 +1830,11 @@
             return currmana;
         }
 
+        /// <summary>
+        /// 取下一个entity
+        /// </summary>
+        /// <remarks>随机取一个entity，防止与当前已有的entity重复。</remarks>
+        /// <returns></returns>
         public int getNextEntity()
         {
             //i dont trust return this.nextEntity++; !!!
@@ -1825,6 +1845,12 @@
 
 
         // get all minions which are attackable
+        /// <summary>
+        /// 获得可以被攻击的角色列表
+        /// </summary>
+        /// <param name="own">我方进行攻击true/敌方进行攻击false</param>
+        /// <param name="isLethalCheck">是否已经可以斩杀</param>
+        /// <returns>可以被攻击的角色列表</returns>
         public List<Minion> getAttackTargets(bool own, bool isLethalCheck)
         {
             List<Minion> trgts = new List<Minion>();
@@ -1855,6 +1881,12 @@
             return trgts2;
         }
 
+        /// <summary>
+        /// 获得随从最好的放置位置
+        /// </summary>
+        /// <param name="card">放置的随从卡牌</param>
+        /// <param name="lethal"></param>
+        /// <returns></returns>
         public int getBestPlace(CardDB.Card card, bool lethal)
         {
             //we return the zonepos!
@@ -2244,6 +2276,11 @@
             return bestplace + 1;
         }
 
+        /// <summary>
+        /// 得到最合适的“进化”选择
+        /// </summary>
+        /// <param name="m">进化的随从</param>
+        /// <returns>1:+1/+1 | 2:angr | 3:hp | 4:taunt | 5:divine | 6:poison</returns>
         public int getBestAdapt(Minion m) //1-+1/+1, 2-angr, 3-hp, 4-taunt, 5-divine, 6-poison
         {
             bool ownLethal = this.ownHeroHasDirectLethal();
@@ -2277,6 +2314,10 @@
             return 0;
         }
 
+        /// <summary>
+        /// 计算如果我方随从都打脸，最终将会差多少伤害斩杀
+        /// </summary>
+        /// <returns>所差伤害</returns>
         public int guessEnemyHeroLethalMissing()
         {
             int lethalMissing = this.enemyHero.armor + this.enemyHero.Hp;
@@ -2294,6 +2335,9 @@
             return lethalMissing;
         }
 
+        /// <summary>
+        /// 更新字段guessingHeroHP
+        /// </summary>
         public void guessHeroDamage()
         {
             int ghd = 0;
@@ -2466,9 +2510,13 @@
             }
             if (this.ownHero.Hp + this.ownHero.armor <= ablilityDmg && !haveImmune) this.guessingHeroHP = this.ownHero.Hp + this.ownHero.armor - ablilityDmg;
         }
-		
 
 
+
+        /// <summary>
+        /// 我方英雄是否已经能够被斩杀
+        /// </summary>
+        /// <returns></returns>
         public bool ownHeroHasDirectLethal()
         {
             //fastLethalCheck
@@ -2572,6 +2620,9 @@
             return true;
         }
 
+        /// <summary>
+        /// 在敌方回合开始时模拟触发我方奥秘
+        /// </summary>
         public void simulateTrapsStartEnemyTurn()
         {
             // DONT KILL ENEMY HERO (cause its only guessing)
@@ -2785,6 +2836,9 @@
             this.doDmgTriggers();
         }
 
+        /// <summary>
+        /// 在敌方回合结束时进行模拟触发我方奥秘
+        /// </summary>
         public void simulateTrapsEndEnemyTurn()
         {
             // DONT KILL ENEMY HERO (cause its only guessing)
@@ -2896,6 +2950,9 @@
             this.doDmgTriggers();
         }
 
+        /// <summary>
+        /// 结束回合
+        /// </summary>
         public void endTurn()
         {
             if (this.turnCounter == 0) this.manaTurnEnd = this.mana;
@@ -2921,6 +2978,9 @@
             this.isOwnTurn = !this.isOwnTurn;
         }
 
+        /// <summary>
+        /// 开始回合
+        /// </summary>
         public void startTurn()
         {
             this.triggerStartTurn(this.isOwnTurn);
@@ -2936,6 +2996,9 @@
             }
         }
 
+        /// <summary>
+        /// 解锁过载的法力水晶
+        /// </summary>
         public void unlockMana()
         {
             this.ueberladung = 0;
@@ -2944,6 +3007,12 @@
         }
 
         //HeroPowerDamage calculation---------------------------------------------------
+        /// <summary>
+        /// 计算英雄技能伤害
+        /// </summary>
+        /// <remarks>如AT_003，会使英雄技能额外造成伤害</remarks>
+        /// <param name="dmg">原伤害</param>
+        /// <returns>获得加成后的伤害</returns>
         public int getHeroPowerDamage(int dmg)
         {
             dmg += this.ownHeroPowerExtraDamage;
@@ -2951,6 +3020,12 @@
             return dmg;
         }
 
+        /// <summary>
+        /// 计算敌方英雄技能伤害
+        /// </summary>
+        /// <remarks>如AT_003，会使英雄技能额外造成伤害</remarks>
+        /// <param name="dmg">原伤害</param>
+        /// <returns>获得加成后的伤害</returns>
         public int getEnemyHeroPowerDamage(int dmg)
         {
             dmg += this.enemyHeroPowerExtraDamage;
@@ -2960,6 +3035,12 @@
 
 
         //spelldamage calculation---------------------------------------------------
+        /// <summary>
+        /// 计算我方法术造成的伤害
+        /// </summary>
+        /// <remarks>如维伦、法术强度等，会使法术额外造成伤害</remarks>
+        /// <param name="dmg">原伤害</param>
+        /// <returns>获得加成后的伤害</returns>
         public int getSpellDamageDamage(int dmg)
         {
             int retval = dmg;
@@ -2968,6 +3049,12 @@
             return retval;
         }
 
+        /// <summary>
+        /// 计算我方法术造成的治疗量
+        /// </summary>
+        /// <remarks>可能受到奥金尼、法强等影响</remarks>
+        /// <param name="heal">原治疗量</param>
+        /// <returns>影响后的治疗量（可能由于奥金尼导致返回一个负数）</returns>
         public int getSpellHeal(int heal)
         {
             int retval = heal;
@@ -2980,17 +3067,34 @@
             return retval;
         }
 
+        /// <summary>
+        /// 法术造成吸血
+        /// </summary>
+        /// <param name="heal">吸血量</param>
+        /// <param name="own">我方true/敌方false</param>
         public void applySpellLifesteal(int heal, bool own)
         {
             bool minus = own ? (this.anzOwnAuchenaiSoulpriest > 0 || this.embracetheshadow > 0) : (this.anzEnemyAuchenaiSoulpriest > 0);
             this.minionGetDamageOrHeal(own ? ownHero : enemyHero, -heal * (minus ? -1 : 1));
         }
 
+        /// <summary>
+        /// 计算我方随从造成的治疗量
+        /// </summary>
+        /// <remarks>受到奥金尼的影响</remarks>
+        /// <param name="heal">原治疗量</param>
+        /// <returns>影响后的治疗量（可能由于奥金尼导致返回一个负数）</returns>
         public int getMinionHeal(int heal)
         {
             return (this.anzOwnAuchenaiSoulpriest > 0 || this.embracetheshadow > 0) ? -heal : heal;
         }
 
+        /// <summary>
+        /// 计算敌方法术造成的伤害
+        /// </summary>
+        /// <remarks>如维伦、法术强度等，会使法术额外造成伤害</remarks>
+        /// <param name="dmg">原伤害</param>
+        /// <returns>获得加成后的伤害</returns>
         public int getEnemySpellDamageDamage(int dmg)
         {
             int retval = dmg;
@@ -2999,6 +3103,12 @@
             return retval;
         }
 
+        /// <summary>
+        /// 计算敌方法术造成的治疗量
+        /// </summary>
+        /// <remarks>可能受到奥金尼、法强等影响</remarks>
+        /// <param name="heal">原治疗量</param>
+        /// <returns>影响后的治疗量（可能由于奥金尼导致返回一个负数）</returns>
         public int getEnemySpellHeal(int heal)
         {
             int retval = heal;
@@ -3011,6 +3121,12 @@
             return retval;
         }
 
+        /// <summary>
+        /// 计算敌方随从造成的治疗量
+        /// </summary>
+        /// <remarks>受到奥金尼的影响</remarks>
+        /// <param name="heal">原治疗量</param>
+        /// <returns>影响后的治疗量（可能由于奥金尼导致返回一个负数）</returns>
         public int getEnemyMinionHeal(int heal)
         {
             return (this.anzEnemyAuchenaiSoulpriest >= 1) ? -heal : heal;
@@ -3019,6 +3135,10 @@
 
         // do the action--------------------------------------------------------------
 
+        /// <summary>
+        /// 执行Action
+        /// </summary>
+        /// <param name="aa">被执行的Action</param>
         public void doAction(Action aa)
         {
             //CREATE NEW MINIONS (cant use a.target or a.own) (dont belong to this board)
@@ -3253,6 +3373,12 @@
         //minion attacks a minion
 
         //dontcount = betrayal effect!
+        /// <summary>
+        /// 角色攻击
+        /// </summary>
+        /// <param name="attacker">攻击者</param>
+        /// <param name="defender">攻击目标（防御者）</param>
+        /// <param name="dontcount">是否不计攻击次数，如盗贼奥秘背叛、攻击同时对相邻随从造成伤害等</param>
         public void minionAttacksMinion(Minion attacker, Minion defender, bool dontcount = false)
         {
             int oldHp = defender.Hp;
@@ -3476,6 +3602,12 @@
         }
 
         //a hero attacks a minion
+        /// <summary>
+        /// 某一方英雄用武器攻击（存疑：本回合攻击力）
+        /// </summary>
+        /// <param name="hero">攻击者</param>
+        /// <param name="target">攻击目标</param>
+        /// <param name="penality">惩罚值</param>
         public void attackWithWeapon(Minion hero, Minion target, int penality)
         {
             bool own = hero.own;
@@ -3599,6 +3731,14 @@
         // 4.1 dmg/died/dthrttl triggers
         // 5 after you summon a minion triggers
         // 5.1 dmg/died/dthrttl triggers
+        /// <summary>
+        /// 我方打出一张卡牌
+        /// </summary>
+        /// <param name="hc">打出的卡牌</param>
+        /// <param name="target">目标</param>
+        /// <param name="position">如果为随从牌，放置的位置</param>
+        /// <param name="choice">抉择参数</param>
+        /// <param name="penality">惩罚值</param>
         public void playACard(Handmanager.Handcard hc, Minion target, int position, int choice, int penality)
         {
             CardDB.Card c = hc.card;
@@ -3761,6 +3901,14 @@
 
         }
 
+        /// <summary>
+        /// 敌方打出一张牌（无引用）
+        /// </summary>
+        /// <param name="c">打出的牌</param>
+        /// <param name="target">目标</param>
+        /// <param name="position"></param>
+        /// <param name="choice">抉择参数</param>
+        /// <param name="penality">惩罚值</param>
         public void enemyplaysACard(CardDB.Card c, Minion target, int position, int choice, int penality)
         {
 
@@ -3818,6 +3966,13 @@
         }
 
 
+        /// <summary>
+        /// 使用英雄技能
+        /// </summary>
+        /// <param name="target">目标</param>
+        /// <param name="penality">惩罚值</param>
+        /// <param name="ownturn">我方true/敌方false</param>
+        /// <param name="choice">抉择参数</param>
         public void playHeroPower(Minion target, int penality, bool ownturn, int choice)
         {
 
@@ -3849,6 +4004,11 @@
 
 
         //lower durability of weapon + destroy them (deathrattle) 
+        /// <summary>
+        /// 使某一方武器失去N点耐久度
+        /// </summary>
+        /// <param name="value">失去的耐久度</param>
+        /// <param name="own">我方true/敌方false</param>
         public void lowerWeaponDurability(int value, bool own)
         {
             if (own)
@@ -3925,6 +4085,9 @@
 
 
 
+        /// <summary>
+        /// 造成伤害扳机
+        /// </summary>
         public void doDmgTriggers()
         {
             //we do the these trigger manualy (to less minions) (we could trigger them with m.handcard.card.sim_card.ontrigger...)
@@ -3971,6 +4134,9 @@
             }
         }
 
+        /// <summary>
+        /// 某角色获得治疗扳机
+        /// </summary>
         public void triggerACharGotHealed()
         {
             int anz = this.tempTrigger.charsGotHealed;
@@ -4012,6 +4178,9 @@
             }
         }
 
+        /// <summary>
+        /// 某随从获得治疗扳机
+        /// </summary>
         public void triggerAMinionGotHealed()
         {
             //also dead minions trigger this
@@ -4045,6 +4214,9 @@
             }
         }
 
+        /// <summary>
+        /// 某随从受到伤害扳机
+        /// </summary>
         public void triggerAMinionGotDmg()
         {
             int anzOwnMinionsGotDmg = this.tempTrigger.ownMinionsGotDmg;
@@ -4076,6 +4248,9 @@
             this.enemyHero.anzGotDmg = 0;
         }
 
+        /// <summary>
+        /// 某随从失去圣盾扳机
+        /// </summary>
         public void triggerAMinionLosesDivineShield()
         {
             int anzOwn = this.tempTrigger.ownMinionLosesDivineShield;
@@ -4106,6 +4281,9 @@
             }
         }
 
+        /// <summary>
+        /// 某随从死亡扳机
+        /// </summary>
         public void triggerAMinionDied()
         {
             this.ownMinionsDiedTurn += this.tempTrigger.ownMinionsDied;
@@ -4170,6 +4348,11 @@
             }
         }
 
+        /// <summary>
+        /// 某随从被攻击扳机
+        /// </summary>
+        /// <param name="attacker">攻击者</param>
+        /// <param name="target">攻击目标</param>
         public void triggerAMinionIsGoingToAttack(Minion attacker, Minion target)
         {
             
@@ -4231,6 +4414,12 @@
             }
         }
 
+        /// <summary>
+        /// 随从造成伤害扳机
+        /// </summary>
+        /// <param name="m">造成伤害的随从</param>
+        /// <param name="dmgDone">造成的伤害</param>
+        /// <param name="isAttacker"></param>
         public void triggerAMinionDealedDmg(Minion m, int dmgDone, bool isAttacker)
         {
             //3 cards only has such trigger
@@ -4255,6 +4444,11 @@
             }
         }
 
+        /// <summary>
+        /// 打出卡牌扳机
+        /// </summary>
+        /// <param name="hc">打出的卡牌</param>
+        /// <param name="own">我方true/敌方false</param>
         public void triggerACardWillBePlayed(Handmanager.Handcard hc, bool own)
         {
             if (own)
@@ -4345,6 +4539,10 @@
 
         // public void triggerACardWasPlayed(CardDB.Card c, bool own) {        }
 
+        /// <summary>
+        /// 随从置入战场时扳机
+        /// </summary>
+        /// <param name="m">随从</param>
         public void triggerAMinionIsSummoned(Minion m)
         {
             if (m.own)
@@ -4365,6 +4563,10 @@
             }
         }
 
+        /// <summary>
+        /// 随从置入战场后扳机
+        /// </summary>
+        /// <param name="mnn">随从</param>
         public void triggerAMinionWasSummoned(Minion mnn)
         {
             if (mnn.own)
@@ -4404,6 +4606,10 @@
 
         }
 
+        /// <summary>
+        /// 回合结束扳机
+        /// </summary>
+        /// <param name="ownturn">我方回合true/敌方回合false</param>
         public void triggerEndTurn(bool ownturn)
         {
             foreach (Minion m in this.ownMinions.ToArray())
@@ -4486,6 +4692,10 @@
         }
 
 
+        /// <summary>
+        /// 回合开始扳机
+        /// </summary>
+        /// <param name="ownturn">我方回合true/敌方回合false</param>
         public void triggerStartTurn(bool ownturn)
         {
             if (this.diedMinions != null)
@@ -4597,6 +4807,10 @@
             this.value = int.MinValue;
         }
 
+        /// <summary>
+        /// 英雄获得护甲扳机
+        /// </summary>
+        /// <param name="ownHero">我方英雄true/敌方英雄false</param>
         public void triggerAHeroGotArmor(bool ownHero)
         {
             foreach (Minion m in ((ownHero) ? this.ownMinions : this.enemyMinions))
@@ -4608,6 +4822,10 @@
             }
         }
 
+        /// <summary>
+        /// 卡牌发生变化扳机
+        /// </summary>
+        /// <param name="own">我方true/敌方false</param>
         public void triggerCardsChanged(bool own)
         {
             if (own)
@@ -4668,6 +4886,10 @@
 
 
 
+        /// <summary>
+        /// 激励扳机
+        /// </summary>
+        /// <param name="ownturn">我方true/敌方false</param>
         public void triggerInspire(bool ownturn)
         {
             foreach (Minion m in this.ownMinions.ToArray())
@@ -4684,6 +4906,12 @@
         }
 
 
+        /// <summary>
+        /// 触发敌方奥秘——当某角色进行攻击
+        /// </summary>
+        /// <param name="attacker">攻击者</param>
+        /// <param name="defender">攻击目标（防御者）</param>
+        /// <returns></returns>
         public int secretTrigger_CharIsAttacked(Minion attacker, Minion defender)
         {
             int newTarget = 0;
@@ -4815,6 +5043,11 @@
             return newTarget;
         }
 
+        /// <summary>
+        /// 触发敌方奥秘——英雄受到伤害时
+        /// </summary>
+        /// <param name="own">受伤害的英雄归属，我方true/敌方false</param>
+        /// <param name="dmg">受到的伤害</param>
         public void secretTrigger_HeroGotDmg(bool own, int dmg)
         {
             int triggered = 0;
@@ -4854,6 +5087,10 @@
 
         }
 
+        /// <summary>
+        /// 触发敌方奥秘——使用一张随从牌后
+        /// </summary>
+        /// <param name="playedMinion"></param>
         public void secretTrigger_MinionIsPlayed(Minion playedMinion)
         {
             int triggered = 0;
@@ -4917,6 +5154,12 @@
 
         }
 
+        /// <summary>
+        /// 触发敌方奥秘——施放一个法术后
+        /// </summary>
+        /// <param name="target">法术目标</param>
+        /// <param name="c">施放的法术牌</param>
+        /// <returns></returns>
         public int secretTrigger_SpellIsPlayed(Minion target, CardDB.Card c)
         {
             int triggered = 0;
@@ -4982,6 +5225,10 @@
 
         }
 
+        /// <summary>
+        /// 触发敌方奥秘——当某随从死亡后
+        /// </summary>
+        /// <param name="own">死亡的随从归属，我方true/敌方false</param>
         public void secretTrigger_MinionDied(bool own)
         {
             int triggered = 0;
@@ -5030,6 +5277,9 @@
 
         }
 
+        /// <summary>
+        /// 触发敌方奥秘——在我方使用英雄技能后
+        /// </summary>
         public void secretTrigger_HeroPowerUsed()
         {
             int triggered = 0;
@@ -5057,6 +5307,14 @@
         }
 
 
+        /// <summary>
+        /// 获得某行为将可能触发敌方奥秘的个数
+        /// </summary>
+        /// <param name="type">行为类型，0-使用随从牌，1-施放法术，2-攻击英雄，3-英雄受到伤害，4-随从死亡，5-使用英雄技能</param>
+        /// <param name="actedMinionOwn">进行攻击的角色归属，我方true/敌方false</param>
+        /// <param name="actedMinionIsHero">进行攻击的角色是否为随从</param>
+        /// <param name="target">法术/攻击的目标</param>
+        /// <returns></returns>
         public int getSecretTriggersByType(int type, bool actedMinionOwn, bool actedMinionIsHero,  Minion target)
         {
             
@@ -5200,6 +5458,10 @@
             return triggered;
         }
 
+        /// <summary>
+        /// 执行亡语效果
+        /// </summary>
+        /// <param name="deathrattleMinions">待执行亡语效果的随从列表</param>
         public void doDeathrattles(List<Minion> deathrattleMinions)
         {
             //todo sort them from oldest to newest (first played, first deathrattle)
@@ -5375,6 +5637,10 @@
         }
 
 
+        /// <summary>
+        /// 更新面板
+        /// </summary>
+        /// <remarks>较为复杂，通常用于触发扳机后更新</remarks>
         public void updateBoards()
         {
             if (!this.tempTrigger.ownMinionsChanged && !this.tempTrigger.enemyMininsChanged) return;
@@ -5530,6 +5796,11 @@
             //update buffs
         }
 
+        /// <summary>
+        /// 使某随从获得或失去光环buff
+        /// </summary>
+        /// <param name="m">获得或失去光环buff的随从</param>
+        /// <param name="get">获得true/失去false</param>
         public void minionGetOrEraseAllAreaBuffs(Minion m, bool get)
         {
             if (m.isHero) return;
@@ -5643,6 +5914,10 @@
 
         }
 
+        /// <summary>
+        /// 更新相邻种类buff（存疑）
+        /// </summary>
+        /// <param name="own">我方true/敌方false</param>
         public void updateAdjacentBuffs(bool own)
         {
             //only call this after update board
@@ -5678,6 +5953,14 @@
             }
         }
 
+        /// <summary>
+        /// 创造一个新随从
+        /// </summary>
+        /// <remarks>会触发光环入场效果</remarks>
+        /// <param name="hc">由哪张手牌创造</param>
+        /// <param name="zonepos">所在位置</param>
+        /// <param name="own">属于我方true/敌方false</param>
+        /// <returns></returns>
         public Minion createNewMinion(Handmanager.Handcard hc, int zonepos, bool own)
         {
             Minion m = new Minion();
@@ -5745,6 +6028,12 @@
             return m;
         }
 
+        /// <summary>
+        /// 打出一张随从牌
+        /// </summary>
+        /// <param name="hc">打出的随从牌</param>
+        /// <param name="choice">抉择参数，用于sim</param>
+        /// <param name="zonepos">放入战场中的位置</param>
         public void placeAmobSomewhere(Handmanager.Handcard hc, int choice, int zonepos)
         {
             int mobplace = zonepos;
@@ -5773,6 +6062,11 @@
             if (logging) Helpfunctions.Instance.logg("added " + m.handcard.card.name);
         }
 
+        /// <summary>
+        /// 将随从置入战场
+        /// </summary>
+        /// <param name="m">随从</param>
+        /// <param name="isSummon">无用的参数</param>
         public void addMinionToBattlefield(Minion m, bool isSummon = true)
         {
             List<Minion> temp = (m.own) ? this.ownMinions : this.enemyMinions;
@@ -5800,6 +6094,11 @@
             m.updateReadyness();
         }
 
+        /// <summary>
+        /// 为某一方英雄装备一把武器
+        /// </summary>
+        /// <param name="c">武器卡牌</param>
+        /// <param name="own">我方true/敌方false</param>
         public void equipWeapon(CardDB.Card c, bool own)
         {
             Minion hero = (own) ? this.ownHero : this.enemyHero;
@@ -5856,7 +6155,15 @@
         }
 
 
-        
+
+        /// <summary>
+        /// 召唤一个随从
+        /// </summary>
+        /// <param name="c">所召唤随从的Card</param>
+        /// <param name="zonepos">召唤随从的位置</param>
+        /// <param name="own">我方true，敌方true</param>
+        /// <param name="spawnKid">是否为不重要的衍生随从。仅在随从达到上限时用以添加惩罚。</param>
+        /// <param name="oneMoreIsAllowed">随从达到上限后是否仍可召唤。通常用于亡语召唤随从或先消灭再召唤。</param>
         public void callKid(CardDB.Card c, int zonepos, bool own, bool spawnKid = true, bool oneMoreIsAllowed = false)
         {
             
@@ -5890,7 +6197,11 @@
             addMinionToBattlefield(m);
 
         }
-        
+
+        /// <summary>
+        /// 冻结某角色（随从/英雄）
+        /// </summary>
+        /// <param name="target">被冻结的目标</param>
         public void minionGetFrozen(Minion target)
         {
             target.frozen = true;
@@ -5920,6 +6231,10 @@
             }
         }
 
+        /// <summary>
+        /// 沉默某随从
+        /// </summary>
+        /// <param name="m">将被沉默的随从</param>
         public void minionGetSilenced(Minion m)
         {
             //minion cant die due to silencing!
@@ -5927,6 +6242,10 @@
 
         }
 
+        /// <summary>
+        /// 沉默所有随从
+        /// </summary>
+        /// <param name="own"></param>
         public void allMinionsGetSilenced(bool own)
         {
             List<Minion> temp = (own) ? this.ownMinions : this.enemyMinions;
@@ -5936,6 +6255,12 @@
             }
         }
 
+        /// <summary>
+        /// 抽一张牌/发现一张牌
+        /// </summary>
+        /// <param name="ss">抽到卡牌的cardName</param>
+        /// <param name="own">我方true/敌方false</param>
+        /// <param name="nopen">是否不从牌库抽出，如发现一张牌、抽某张牌的复制，默认为false从牌库抽出</param>
         public void drawACard(CardDB.cardName ss, bool own, bool nopen = false)
         {
             CardDB.cardName s = ss;
@@ -6065,6 +6390,12 @@
 
         }
 
+        /// <summary>
+        /// 抽一张牌/发现一张牌
+        /// </summary>
+        /// <param name="ss">抽到卡牌的cardIDEnum</param>
+        /// <param name="own">我方true/敌方false</param>
+        /// <param name="nopen">是否不从牌库抽出，如发现一张牌、抽某张牌的复制，默认为false从牌库抽出</param>
         public void drawACard(CardDB.cardIDEnum ss, bool own, bool nopen = false)
         {
             CardDB.cardIDEnum s = ss;
@@ -6191,6 +6522,10 @@
         }
 
 
+        /// <summary>
+        /// 弃掉我方某张手牌
+        /// </summary>
+        /// <param name="hcc">弃掉的手牌</param>
         public void removeCard(Handmanager.Handcard hcc)
         {
             int cardPos = 1;
@@ -6211,6 +6546,11 @@
             if (hcTmp != null) this.owncards.Remove(hcTmp);
         }
 
+        /// <summary>
+        /// 为Handcard的position重新编号
+        /// </summary>
+        /// 用于卡牌移除后或添加后，整理卡牌的position
+        /// <param name="list">某方手牌</param>
         public void renumHandCards(List<Handmanager.Handcard> list)
         {
             int count = list.Count;
@@ -6218,6 +6558,11 @@
         }
 
 
+        /// <summary>
+        /// 保证不斩杀对面的情况下对敌方英雄造成伤害
+        /// </summary>
+        /// <remarks>用于敌方回合的模拟</remarks>
+        /// <param name="dmg">造成的伤害</param>
         public void attackEnemyHeroWithoutKill(int dmg)
         {
             this.enemyHero.cantLowerHPbelowONE = true;
@@ -6225,6 +6570,10 @@
             this.enemyHero.cantLowerHPbelowONE = false;
         }
 
+        /// <summary>
+        /// 消灭某随从
+        /// </summary>
+        /// <param name="m">将被消灭的随从</param>
         public void minionGetDestroyed(Minion m)
         {
             if (m.own)
@@ -6240,6 +6589,9 @@
 
         }
 
+        /// <summary>
+        /// 消灭所有随从
+        /// </summary>
         public void allMinionsGetDestroyed()
         {
             foreach (Minion m in this.ownMinions)
@@ -6253,12 +6605,23 @@
         }
 
 
+        /// <summary>
+        /// 英雄获得护甲
+        /// </summary>
+        /// <param name="m">Minion类型的英雄</param>
+        /// <param name="armor">护甲值</param>
         public void minionGetArmor(Minion m, int armor)
         {
             m.armor += armor;
             this.triggerAHeroGotArmor(m.own);
         }
 
+        /// <summary>
+        /// 将某随从移回手牌
+        /// </summary>
+        /// <param name="m">将被操作的随从</param>
+        /// <param name="own">移回哪一方手牌，我方true/敌方false</param>
+        /// <param name="manachange">法力值消耗变化</param>
         public void minionReturnToHand(Minion m, bool own, int manachange)
         {
             List<Minion> temp = (m.own) ? this.ownMinions : this.enemyMinions;
@@ -6282,6 +6645,11 @@
             else this.tempTrigger.enemyMininsChanged = true;
         }
 
+        /// <summary>
+        /// 将某随从洗入某一方的牌库
+        /// </summary>
+        /// <param name="m">将被操作的随从</param>
+        /// <param name="own">将要洗入哪一方牌库，我方true/敌方false</param>
         public void minionReturnToDeck(Minion m, bool own)
         {
             List<Minion> temp = (m.own) ? this.ownMinions : this.enemyMinions;
@@ -6295,6 +6663,12 @@
             else this.enemyDeckSize++;
         }
 
+        /// <summary>
+        /// 随从变形
+        /// </summary>
+        /// <remarks>如变羊术</remarks>
+        /// <param name="m">要变形的随从</param>
+        /// <param name="c">将会变成的卡牌</param>
         public void minionTransform(Minion m, CardDB.Card c)
         {
             m.handcard.card.sim_card.onAuraEnds(this, m);//end aura of the minion
@@ -6332,6 +6706,12 @@
             if (logging) Helpfunctions.Instance.logg("minion got sheep" + m.name + " " + m.Angr);
         }
 
+        /// <summary>
+        /// 得到一个法力值消耗为（X）的随机随从Card
+        /// </summary>
+        /// <remarks>实际就是身材符合费用的白板</remarks>
+        /// <param name="manaCost">X</param>
+        /// <returns>随从的CardDB.Card类型</returns>
         public CardDB.Card getRandomCardForManaMinion(int manaCost)
         {
             CardDB.Card kid = CardDB.Instance.getCardDataFromID(CardDB.cardIDEnum.CS2_231); 
@@ -6355,6 +6735,13 @@
             return kid;
         }
 
+        /// <summary>
+        /// 获取随机造成X点伤害的最佳目标
+        /// </summary>
+        /// <remarks>如果自己能先于敌方斩杀对手，则选择敌方英雄，否则根据伤害数选择最消极的情况（伤害高则选择血量最低的，伤害低则选择血量最高的）</remarks>
+        /// <param name="damage">X点伤害</param>
+        /// <param name="onlyMinions">是否不包含英雄，默认false包含英雄</param>
+        /// <returns></returns>
         public Minion getEnemyCharTargetForRandomSingleDamage(int damage, bool onlyMinions = false)
         {
             Minion target = null;
@@ -6374,6 +6761,13 @@
             return target;
         }
 
+        /// <summary>
+        /// 随从被某方获得控制权
+        /// </summary>
+        /// <param name="m">被操作的随从</param>
+        /// <param name="newOwner">新的控制者，我方true/敌方false</param>
+        /// <param name="canAttack">能否进行攻击</param>
+        /// <param name="forced"></param>
         public void minionGetControlled(Minion m, bool newOwner, bool canAttack, bool forced = false)
         {
             List<Minion> newOwnerList = (newOwner) ? this.ownMinions : this.enemyMinions;
@@ -6429,6 +6823,10 @@
 
         }
 
+        /// <summary>
+        /// 使某随从磁力吸附到其他机械随从上
+        /// </summary>
+        /// <param name="mOwn">磁力随从</param>
         public void Magnetic(Minion mOwn)
         {
             List<Minion> temp = (mOwn.own) ? this.ownMinions : this.enemyMinions;
@@ -6451,6 +6849,10 @@
             }
         }
 
+        /// <summary>
+        /// 使某随从获得风怒
+        /// </summary>
+        /// <param name="m">获得风怒的随从</param>
         public void minionGetWindfurry(Minion m)
         {
             if (m.windfury) return;
@@ -6458,11 +6860,19 @@
             m.updateReadyness();
         }
 
+        /// <summary>
+        /// 使某随从获得冲锋
+        /// </summary>
+        /// <param name="m">获得冲锋的随从</param>
         public void minionGetCharge(Minion m)
         {
             m.charge++;
             m.updateReadyness();
         }
+        /// <summary>
+        /// 使某随从获得突袭
+        /// </summary>
+        /// <param name="m">获得突袭的随从</param>
         public void minionGetRush(Minion m)
         {
             m.rush++;
@@ -6473,6 +6883,10 @@
             }
 
         }
+        /// <summary>
+        /// 使某随从失去冲锋
+        /// </summary>
+        /// <param name="m">失去冲锋的随从</param>
         public void minionLostCharge(Minion m)
         {
             m.charge--;
@@ -6481,6 +6895,13 @@
 
 
 
+        /// <summary>
+        /// 使某角色获得本回合buff
+        /// </summary>
+        /// <remarks>暂时只有角色获得本回合攻击力buff的引用</remarks>
+        /// <param name="m">获得buff的角色</param>
+        /// <param name="tempAttack">本回合攻击buff</param>
+        /// <param name="tempHp">本回合血量buff</param>
         public void minionGetTempBuff(Minion m, int tempAttack, int tempHp)
         {
             if (!m.silenced && m.name == CardDB.cardName.lightspawn) return;
@@ -6492,6 +6913,12 @@
             m.Angr += tempAttack;
         }
 
+        /// <summary>
+        /// 使某随从获得相邻类型buff
+        /// </summary>
+        /// <param name="m">获得buff的随从</param>
+        /// <param name="angr">获得攻击buff</param>
+        /// <param name="vert">获得血量buff</param>
         public void minionGetAdjacentBuff(Minion m, int angr, int vert)
         {
             if (!m.silenced && m.name == CardDB.cardName.lightspawn) return;
@@ -6499,6 +6926,12 @@
             m.AdjacentAngr += angr;
         }
 
+        /// <summary>
+        /// 使某一方所有随从获得buff
+        /// </summary>
+        /// <param name="own">我方true/敌方false</param>
+        /// <param name="attackbuff">攻击buff</param>
+        /// <param name="hpbuff">血量buff</param>
         public void allMinionOfASideGetBuffed(bool own, int attackbuff, int hpbuff)
         {
             List<Minion> temp = (own) ? this.ownMinions : this.enemyMinions;
@@ -6508,6 +6941,12 @@
             }
         }
 
+        /// <summary>
+        /// 使某随从获得buff
+        /// </summary>
+        /// <param name="m">获得buff的随从</param>
+        /// <param name="attackbuff">攻击buff</param>
+        /// <param name="hpbuff"></param>
         public void minionGetBuffed(Minion m, int attackbuff, int hpbuff)
         {
             if (attackbuff != 0) m.Angr = Math.Max(0, m.Angr + attackbuff);
@@ -6536,7 +6975,13 @@
                 m.Angr = m.Hp;
             }
         }
-        
+
+        /// <summary>
+        /// 使你的克苏恩获得buff
+        /// </summary>
+        /// <param name="attackbuff">攻击buff</param>
+        /// <param name="hpbuff">血量buff</param>
+        /// <param name="tauntbuff">嘲讽buff</param>
         public void cthunGetBuffed(int attackbuff, int hpbuff, int tauntbuff)
         {
             this.anzOgOwnCThunAngrBonus += attackbuff;
@@ -6558,6 +7003,10 @@
             }
         }
 
+        /// <summary>
+        /// 使某随从失去圣盾
+        /// </summary>
+        /// <param name="m">失去圣盾的随从</param>
         public void minionLosesDivineShield(Minion m)
         {
             m.divineshild = false;
@@ -6565,6 +7014,11 @@
             else this.tempTrigger.enemyMinionLosesDivineShield++;
         }
 
+        /// <summary>
+        /// 使某方弃掉N张手牌
+        /// </summary>
+        /// <param name="num">弃牌数</param>
+        /// <param name="own">我方true/敌方false</param>
         public void discardCards(int num, bool own)
         {
             if (own)
@@ -6721,6 +7175,10 @@
             this.triggerCardsChanged(own);
         }
 
+        /// <summary>
+        /// 距离斩杀所相差伤害数
+        /// </summary>
+        /// <returns></returns>
         public int lethalMissing()
         {
             if (this.lethlMissing < 1000) return lethlMissing;
@@ -6801,6 +7259,11 @@
             return lethlMissing;
         }
 
+        /// <summary>
+        /// 依照当前场面随从，下回是否可以斩杀
+        /// </summary>
+        /// <remarks>通常只用于回合结束之前的一个Playfield，仅在特定的场合使用</remarks>
+        /// <returns>下回可是否可以斩杀</returns>
         public bool nextTurnWin()
         {
             if (this.anzEnemyTaunt > 0) return false;
@@ -6816,6 +7279,11 @@
             else return true;
         }
 
+        /// <summary>
+        /// 将某随从的攻击力变为X
+        /// </summary>
+        /// <param name="m">所操作的随从</param>
+        /// <param name="newAngr">X</param>
         public void minionSetAngrToX(Minion m, int newAngr)
         {
             if (!m.silenced && m.name == CardDB.cardName.lightspawn) return;
@@ -6824,6 +7292,12 @@
             this.minionGetOrEraseAllAreaBuffs(m, true);
         }
 
+        /// <summary>
+        /// 将某随从的生命值变为X
+        /// </summary>
+        /// <remarks>如守日者塔林姆的效，,变化后无激怒状态。</remarks>
+        /// <param name="m">所操作的随从</param>
+        /// <param name="newHp">X</param>
         public void minionSetLifetoX(Minion m, int newHp)
         {
             minionGetOrEraseAllAreaBuffs(m, false);
@@ -6834,6 +7308,11 @@
             minionGetOrEraseAllAreaBuffs(m, true);
         }
 
+        /// <summary>
+        /// 使一个随从的攻击力等同于其生命值
+        /// </summary>
+        /// <remarks>目前仅用于心灵之火</remarks>
+        /// <param name="m">所操作的随从</param>
         public void minionSetAngrToHP(Minion m)
         {
             m.Angr = m.Hp;
@@ -6842,6 +7321,10 @@
 
         }
 
+        /// <summary>
+        /// 互换一个随从的攻击力和生命值
+        /// </summary>
+        /// <param name="m">被互换攻击力和生命值的随从</param>
         public void minionSwapAngrAndHP(Minion m)
         {
             
@@ -6861,6 +7344,12 @@
             this.minionGetOrEraseAllAreaBuffs(m, true);
         }
 
+        /// <summary>
+        /// 某随从受到伤害/治疗
+        /// </summary>
+        /// <param name="m">受到伤害/治疗的随从</param>
+        /// <param name="dmgOrHeal">伤害量/治疗量</param>
+        /// <param name="dontDmgLoss">是否不计损失，默认为false即计算损失量，用于计算behavior价值使用。like killing a 2/1 with an 3/3 -> => lostdamage = 2</param>
         public void minionGetDamageOrHeal(Minion m, int dmgOrHeal, bool dontDmgLoss = false)
         {
             if (m.Hp > 0) m.getDamageOrHeal(dmgOrHeal, this, false, dontDmgLoss);
@@ -6868,6 +7357,12 @@
 
 
 
+        /// <summary>
+        /// 某一方所有随从受到伤害/治疗
+        /// </summary>
+        /// <remarks>当damages为负数时为治疗</remarks>
+        /// <param name="own">我方true/敌方false</param>
+        /// <param name="damages">伤害量/治疗量</param>
         public void allMinionOfASideGetDamage(bool own, int damages, bool frozen = false)
         {
             List<Minion> temp = (own) ? this.ownMinions : this.enemyMinions;
@@ -6878,6 +7373,12 @@
             }
         }
 
+        /// <summary>
+        /// 某一方所有角色受到伤害/治疗
+        /// </summary>
+        /// <remarks>当damages为负数时为治疗</remarks>
+        /// <param name="own">我方true/敌方false</param>
+        /// <param name="damages">伤害量/治疗量</param>
         public void allCharsOfASideGetDamage(bool own, int damages)
         {
             //ALL CHARS get same dmg
@@ -6890,6 +7391,11 @@
             this.minionGetDamageOrHeal(own ? this.ownHero : this.enemyHero, damages);
         }
 
+        /// <summary>
+        /// 某一方所有角色受到随机分配的N点伤害
+        /// </summary>
+        /// <param name="ownSide">受到伤害的一方</param>
+        /// <param name="times">伤害量</param>
         public void allCharsOfASideGetRandomDamage(bool ownSide, int times) 
         {
             //Deal damage randomly split among all enemies.
@@ -6962,6 +7468,12 @@
             }
         }
 
+        /// <summary>
+        /// 所有角色受到伤害/治疗
+        /// </summary>
+        /// <remarks>当damages为负数时为治疗</remarks>
+        /// <param name="damages">伤害量/治疗量</param>
+        /// <param name="exceptID">不受伤害/治疗随从的entity，通常用于“对其他角色造成伤害”</param>
         public void allCharsGetDamage(int damages, int exceptID = -1)
         {
             foreach (Minion m in this.ownMinions)
@@ -6976,6 +7488,12 @@
             minionGetDamageOrHeal(this.enemyHero, damages);
         }
 
+        /// <summary>
+        /// 所有随从受到伤害/治疗
+        /// </summary>
+        /// <remarks>当damages为负数时为治疗</remarks>
+        /// <param name="damages">伤害量/治疗量</param>
+        /// <param name="exceptID">不受伤害/治疗随从的entity，通常用于“对其他随从造成伤害”</param>
         public void allMinionsGetDamage(int damages, int exceptID = -1)
         {
             foreach (Minion m in this.ownMinions)
@@ -6989,6 +7507,11 @@
         }
 
 
+        /// <summary>
+        /// 设定新的英雄技能
+        /// </summary>
+        /// <param name="newHeroPower">新的英雄技能的cardIDenum</param>
+        /// <param name="own">我方true/敌方false</param>
         public void setNewHeroPower(CardDB.cardIDEnum newHeroPower, bool own)
         {
             if (own)
@@ -7004,6 +7527,13 @@
         }
 
 
+        /// <summary>
+        /// 为符合条件的卡牌做标记
+        /// </summary>
+        /// <remarks>将符合条件的Handmanager.Handcard的extraParam3置为true，暂时仅供Playfield.searchRandomMinionInHand方法使用</remarks>
+        /// <param name="cards">标记范围</param>
+        /// <param name="tag">GAME_TAGs条件，如法术、武器或随从等</param>
+        /// <param name="race">种族条件，当GAME_TAGs为CARDRACE时进行限定，如野兽、海盗等</param>
         private void getHandcardsByType(List<Handmanager.Handcard> cards, GAME_TAGs tag, TAG_RACE race = TAG_RACE.INVALID)
         {
             switch (tag)
@@ -7057,6 +7587,14 @@
             }
         }
 
+        /// <summary>
+        /// 在给定手牌范围内寻找一个随机随从
+        /// </summary>
+        /// <param name="cards">寻找范围</param>
+        /// <param name="mode">寻找模式</param>
+        /// <param name="tag">GAME_TAGs条件，如法术、武器或随从等</param>
+        /// <param name="race">种族条件，当GAME_TAGs为CARDRACE时进行限定，如野兽、海盗等</param>
+        /// <returns></returns>
         public Handmanager.Handcard searchRandomMinionInHand(List<Handmanager.Handcard> cards, searchmode mode, GAME_TAGs tag = GAME_TAGs.None, TAG_RACE race = TAG_RACE.INVALID)
         {
             Handmanager.Handcard ret = null;
@@ -7142,6 +7680,12 @@
             return ret;
         }
 
+        /// <summary>
+        /// 在给定随从范围内寻找一个随机随从
+        /// </summary>
+        /// <param name="minions">寻找范围</param>
+        /// <param name="mode">寻找模式</param>
+        /// <returns>所找到的最后一个随从</returns>
         public Minion searchRandomMinion(List<Minion> minions, searchmode mode)
         {
             if (minions.Count == 0) return null;
@@ -7231,6 +7775,13 @@
             return ret;
         }
 
+        /// <summary>
+        /// 在给定随从范围内寻找一个随机随从（血量小于等于MaxHP）
+        /// </summary>
+        /// <param name="minions">寻找范围</param>
+        /// <param name="mode">寻找模式</param>
+        /// <param name="maxHP">限定随从的最大血量</param>
+        /// <returns>所找到的最后一个随从</returns>
         public Minion searchRandomMinionByMaxHP(List<Minion> minions, searchmode mode, int maxHP)
         {
             //optimistic search
@@ -7313,6 +7864,11 @@
             return ret;
         }
 
+        /// <summary>
+        /// 获得下一张CardDB.Card类型的青玉魔像
+        /// </summary>
+        /// <param name="own">我方true/敌方false</param>
+        /// <returns>下一张CardDB.Card类型的青玉魔像</returns>
         public CardDB.Card getNextJadeGolem(bool own)
         {
             int tmp = 0;            

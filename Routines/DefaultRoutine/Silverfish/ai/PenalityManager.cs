@@ -1,4 +1,4 @@
-﻿namespace HREngine.Bots
+namespace HREngine.Bots
 {
     using System;
     using System.Collections.Generic;
@@ -2672,6 +2672,11 @@
         }
 
 
+        /// <summary>
+        /// 获取随从价值
+        /// </summary>
+        /// <param name="m"></param>
+        /// <returns></returns>
         private int getValueOfMinion(Minion m)
         {
             int ret = 0;
@@ -2681,6 +2686,12 @@
             return ret;
         }
 
+        /// <summary>
+        /// 判断某随从是否为我方价值最低的随从
+        /// </summary>
+        /// <param name="mnn"></param>
+        /// <param name="p"></param>
+        /// <returns></returns>
         private bool isOwnLowest(Minion mnn, Playfield p)
         {
             bool ret = true;
@@ -2720,6 +2731,12 @@
             return ret;
         }
 
+        /// <summary>
+        /// 判断某随从是否为敌方价值最低的随从
+        /// </summary>
+        /// <param name="mnn"></param>
+        /// <param name="p"></param>
+        /// <returns></returns>
         private bool isEnemyLowest(Minion mnn, Playfield p)
         {
             bool ret = true;
@@ -2733,6 +2750,11 @@
             return ret;
         }
 
+        /// <summary>
+        /// 是否含有2血以下可攻击或位于priorityDatabase的随从
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
         private bool hasMinionsWithLowHeal(Playfield p)
         {
             bool ret = false;
